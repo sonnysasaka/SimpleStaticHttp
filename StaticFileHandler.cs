@@ -62,13 +62,13 @@ namespace SimpleStaticHttp
             {
                 System.Console.WriteLine("Exception when serving file/directory: " + ex.Message);
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                context.Response.OutputStream.Close();
+                SafeCloseOutputStream(context);
                 return;
             }
 
             // Not a file nor a directory, return 404.
             context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-            context.Response.OutputStream.Close();
+            SafeCloseOutputStream(context);
         }
 
         private void ServeStaticFile(HttpListenerContext context, string filename)
@@ -84,7 +84,7 @@ namespace SimpleStaticHttp
                 fs.CopyTo(context.Response.OutputStream);
             }
 
-            context.Response.OutputStream.Close();
+            SafeCloseOutputStream(context);
         }
 
         private void ServeDirectoryListing(HttpListenerContext context, string path)
@@ -136,7 +136,7 @@ namespace SimpleStaticHttp
                 writer.WriteEndDocument();
             }
 
-            context.Response.OutputStream.Close();
+            SafeCloseOutputStream(context);
         }
 
 
@@ -159,6 +159,18 @@ namespace SimpleStaticHttp
                 case ".gif": return "image/gif";
                 case ".txt": return "text/plain";
                 default: return "application/octet-stream";
+            }
+        }
+
+        private void SafeCloseOutputStream(HttpListenerContext context)
+        {
+            try
+            {
+                context.Response.OutputStream.Close();
+            }
+            catch (System.Exception ex)
+            {
+                System.Console.WriteLine("Ignoring exception when closing stream: " + ex.Message);
             }
         }
     }
