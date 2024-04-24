@@ -42,7 +42,7 @@ namespace SimpleStaticHttp
         {
             string filePath = Path.Combine(
                 BaseDirectory,
-                context.Request.Url.AbsolutePath.TrimStart('/').Replace('/', '\\'));
+                context.Request.Url.AbsolutePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
 
             try
             {
