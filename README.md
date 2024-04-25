@@ -17,7 +17,9 @@ class ExampleStaticServer
 {
     public static void Main()
     {
-        StaticFileHandler staticHandler = new StaticFileHandler(".");
+        StaticFileHandler staticHandler = new StaticFileHandler(
+                baseDirectory: ".", // local base dir to serve
+                basePath: "/static"); // base URL path which the file/dir is relative to
 
         // This library has a default minimal mime type detection.
         // You can bring your own mime type detector, e.g. using another library:

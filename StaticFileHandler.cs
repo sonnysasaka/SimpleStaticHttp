@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -16,6 +17,11 @@ namespace SimpleStaticHttp
         public string BaseDirectory { get; set; }
 
         /// <summary>
+        /// Gets or sets the base URL path.
+        /// </summary>
+        public string BasePath { get; set; }
+
+        /// <summary>
         /// Type of the content type detector.
         /// </summary>
         public delegate string GetContentTypeDelegate(string path);
@@ -29,9 +35,11 @@ namespace SimpleStaticHttp
         /// Initializes a new instance of the <see cref="StaticFileHandler"/> class.
         /// </summary>
         /// <param name="baseDirectory">The base directory to serve files from.</param>
-        public StaticFileHandler(string baseDirectory)
+        /// <param name="basePath">The URL base path to match.</param>
+        public StaticFileHandler(string baseDirectory = ".", string basePath = "/")
         {
             BaseDirectory = baseDirectory;
+            BasePath = basePath;
         }
 
         /// <summary>
@@ -40,9 +48,18 @@ namespace SimpleStaticHttp
         /// <param name="context">The context of the HTTP request.</param>
         public void HandleContext(HttpListenerContext context)
         {
+            if (!context.Request.Url.AbsolutePath.StartsWith(BasePath))
+            {
+                // Base URL path does not match, should not be routed here.
+                NotFound(context);
+                return;
+            }
+
+            // File path to serve is relative to `BasePath`.
+            string relativePath = context.Request.Url.AbsolutePath.Substring(BasePath.Length).TrimStart('/');
             string filePath = Path.Combine(
                 BaseDirectory,
-                context.Request.Url.AbsolutePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+                relativePath.Replace('/', Path.DirectorySeparatorChar));
 
             try
             {
@@ -60,13 +77,18 @@ namespace SimpleStaticHttp
             }
             catch (System.Exception ex)
             {
-                System.Console.WriteLine("Exception when serving file/directory: " + ex.Message);
+                Console.WriteLine("Exception when serving file/directory: " + ex.Message);
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 SafeCloseOutputStream(context);
                 return;
             }
 
             // Not a file nor a directory, return 404.
+            NotFound(context);
+        }
+
+        private void NotFound(HttpListenerContext context)
+        {
             context.Response.StatusCode = (int)HttpStatusCode.NotFound;
             SafeCloseOutputStream(context);
         }
@@ -170,7 +192,7 @@ namespace SimpleStaticHttp
             }
             catch (System.Exception ex)
             {
-                System.Console.WriteLine("Ignoring exception when closing stream: " + ex.Message);
+                Console.WriteLine("Ignoring exception when closing stream: " + ex.Message);
             }
         }
     }
