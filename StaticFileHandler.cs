@@ -56,7 +56,8 @@ namespace SimpleStaticHttp
             }
 
             // File path to serve is relative to `BasePath`.
-            string relativePath = context.Request.Url.AbsolutePath.Substring(BasePath.Length).TrimStart('/');
+            string relativePath = Uri.UnescapeDataString(context.Request.Url.AbsolutePath)
+                .Substring(BasePath.Length).TrimStart('/');
             string filePath = Path.Combine(
                 BaseDirectory,
                 relativePath.Replace('/', Path.DirectorySeparatorChar));
