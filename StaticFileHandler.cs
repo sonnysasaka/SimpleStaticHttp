@@ -172,17 +172,7 @@ namespace SimpleStaticHttp
             }
 
             // Default MIME type association.
-            switch (Path.GetExtension(path).ToLower())
-            {
-                case ".html": return "text/html";
-                case ".css": return "text/css";
-                case ".js": return "application/javascript";
-                case ".png": return "image/png";
-                case ".jpg": case ".jpeg": return "image/jpeg";
-                case ".gif": return "image/gif";
-                case ".txt": return "text/plain";
-                default: return "application/octet-stream";
-            }
+            return MimeTypes.GetContentType(path);
         }
 
         private void SafeCloseOutputStream(HttpListenerContext context)
