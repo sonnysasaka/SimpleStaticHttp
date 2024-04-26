@@ -33,6 +33,8 @@ namespace SimpleStaticHttp
         {
             StaticFileHandler staticHandler = new StaticFileHandler(baseDir);
 
+            staticHandler.ContentTypeDetector = MimeTypes.GetMimeType;
+
             HttpListener listener = new HttpListener();
             listener.Prefixes.Add($"http://{host}:{port}/");
             listener.Start();
