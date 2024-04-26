@@ -21,7 +21,8 @@ class ExampleStaticServer
                 baseDirectory: ".", // local base dir to serve
                 basePath: "/static"); // base URL path which the file/dir is relative to
 
-        // This library has a default minimal mime type detection.
+        // This library has default mime type detection taken from Apache HTTPD:
+        // https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types.
         // You can bring your own mime type detector, e.g. using another library:
         // staticHandler.ContentTypeDetector = HeyRed.Mime.MimeTypesMap.GetMimeType;
         // Or your custom logic, e.g. return everything as text/plain:
