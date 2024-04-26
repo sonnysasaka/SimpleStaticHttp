@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net5.0;net6.0;net7.0;net8.0</TargetFrameworks>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>simple-static-http-server</ToolCommandName>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <Authors>Sonny Sasaka</Authors>
+    <PackageId>SimpleStaticHttpServer</PackageId>
+    <Version>1.0.1</Version>
+    <Description>A simple static HTTP Server.</Description>
+    <RepositoryUrl>https://github.com/sonnysasaka/SimpleStaticHttp</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.9.*" />
+    <PackageReference Include="SimpleStaticHttp" Version="1.0.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+
+</Project>
