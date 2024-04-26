@@ -68,3 +68,12 @@ To build this library:
 ```
 dotnet pack
 ```
+
+## .NET tool wrapper
+
+A .NET command line tool wrapper is available for basic use of this library:
+
+```
+$ dotnet tool install -g SimpleStaticHttpServer
+$ simple-static-http-server # Serves current dir at http://localhost:8080
+```
