@@ -20,3 +20,11 @@ $ simple-static-http-server # Serves current dir at http://localhost:8080
 ```
 
 Use `--help` to see how to configure host, port, and base dir.
+
+## Support for .NET framework 4.*
+
+For .NET framework 4.*, this is not installable as dotnet tool but can be built:
+
+```
+$ dotnet build -f net40 -c Release
+```
